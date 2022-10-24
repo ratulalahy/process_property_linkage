@@ -1,0 +1,7 @@
+train_test_params:
+  test_size: 0.2
+  random_state: 42
+loc_paths:
+  file_log: ${hydra:runtime.cwd}/logs/log_run.log
+  dir_data: ${hydra:runtime.cwd}/data/processed/microscopic_imgs/cropped_clean/db/
+  f_name_data_csv: Print_Database_ML.csv
