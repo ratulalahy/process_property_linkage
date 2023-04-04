@@ -16,4 +16,4 @@ def main(cfg: LinkageConfig):
     
 
 if __name__ == "__main__":
-    main()    
+    main()
