@@ -2,11 +2,12 @@ import pandas as pd
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from imblearn.over_sampling import RandomOverSampler
 from typing import Tuple
+from dataclasses import dataclass
 
+@dataclass
 class Preprocessing:
-    def __init__(self, X_train: pd.DataFrame, X_test: pd.DataFrame) -> None:
-        self.X_train = X_train
-        self.X_test = X_test
+    X_train: pd.DataFrame 
+    X_test: pd.DataFrame
         
     def handle_missing_values(self) -> None:
         self.X_train.fillna(self.X_train.median(), inplace=True)
@@ -23,8 +24,8 @@ class Preprocessing:
     
     def normalize_numerical_vars(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         scaler = StandardScaler()
-        X_train_scaled = scaler.fit_transform(self.X_train.select_dtypes(include=['float64']))
-        X_test_scaled = scaler.transform(self.X_test.select_dtypes(include=['float64']))
+        X_train_scaled = scaler.fit_transform(self.X_train.select_dtypes(include=['float64', 'int64']))
+        X_test_scaled = scaler.transform(self.X_test.select_dtypes(include=['float64', 'int64']))
         return X_train_scaled, X_test_scaled
     
     def oversample_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
