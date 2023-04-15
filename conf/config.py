@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 @dataclass
 class TrainTestParams:
-    test_size: float
-    random_state: int
+    test_size: float = 0.2
+    random_state: int   = 42
     
 @dataclass
 class LocPaths:

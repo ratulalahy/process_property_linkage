@@ -1,8 +1,26 @@
+hydra:
+  run:
+    dir: ./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: outputs/${name}
+
+project_var:
+  seed_random: 37
+
 train_test_params:
   test_size: 0.2
-  random_state: 42
+  val_size: 0.2
+  random_state: 37
 
-loc_paths:
-  file_log: ${hydra:runtime.cwd}/logs/log_run.log
-  dir_data: ${hydra:runtime.cwd}/data/processed/microscopic_imgs/cropped_clean/db/
-  f_name_data_csv: 'Print_Database_ML.csv'
+loc_dirs:
+  file_log: logs/log_run.log
+  dir_data: data/processed/microscopic_imgs/cropped_clean/db/
+  dir_report_data: reports/data/
+  f_name_data_features_only: JS_A191_dataset_2023_4_4.tsv
+  f_name_data_target_partial_feature: Print_Database_ML.csv
+  f_name_data_feature_target_clean: data_feature_target_clean
+  f_name_data_oversample_feature_target_clean: data_oversample_feature_target_clean
+
+feature_range:
+  high:
+    overspray: 450

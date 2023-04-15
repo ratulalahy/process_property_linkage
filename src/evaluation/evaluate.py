@@ -1,9 +1,10 @@
 from .metrics import calculate_r2, calculate_rmse
 from typing import Dict, List
 import pandas as pd
+from omegaconf import DictConfig
 
 class Evaluator:
-    def __init__(self, config: Dict) -> None:
+    def __init__(self, config: DictConfig) -> None:
         self.config = config
 
     def evaluate_models(self, models: Dict, X_test, y_test) -> pd.DataFrame:

@@ -1,27 +1,21 @@
 from dataclasses import dataclass
+from pathlib import Path
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from omegaconf import DictConfig
 from sklearn.model_selection import train_test_split
 
+
 @dataclass
 class DatasetProperties:
-    file_path: str
-    target_cols: Tuple[str, str, str]
-    feature_columns: List[str] 
-    categorical_columns: List[str] 
-    numerical_columns: List[str]
+    file_path: Optional[Path] = None
+    target_cols: Optional[Tuple[str, str, str]] = None
+    feature_columns: Optional[List[str]] = None
+    categorical_columns: Optional[List[str]] = None
+    numerical_columns: Optional[List[str]] = None
     test_size : float = 0.2
     valid_size : float = 0.2
     
-    def __init__(self, config: DictConfig) -> None:
-        self.file_path = config.file_path
-        self.target_cols = config.target_cols
-        self.feature_columns = config.feature_columns
-        self.categorical_columns = config.categorical_columns
-        self.numerical_columns = config.numerical_columns
-        self.test_size = config.test_size
-        self.val_size = config.valid_size
 
 @dataclass
 class DataSet:
@@ -34,9 +28,11 @@ class DataSet:
     y_val = None
     prop:  DatasetProperties
     
-    def __init__(self, props: DatasetProperties) -> None:
+    
+    def __init__(self, props: DatasetProperties = None, delimiter: str = ',', index_col : List[int]= []) -> None:
         self.prop = props
-        self.data = pd.read_csv(self.prop.file_path)
+        if (self.prop is not None and self.prop.file_path is not None):
+            self.data = pd.read_csv(self.prop.file_path, delimiter=delimiter, index_col=index_col)
         
     def split_train_test(self, random_state: int = 42)-> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """Splits the data into training and test sets."""

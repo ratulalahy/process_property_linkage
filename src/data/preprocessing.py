@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, MinMaxScaler
 from imblearn.over_sampling import RandomOverSampler
-from typing import Tuple
+from typing import Tuple, Dict
 from dataclasses import dataclass
 import smogn
 
@@ -9,7 +9,7 @@ import smogn
 class PreprocessingConfig:
     missing_values: str = "median"
     scaler: str = "standard"
-    oversampler: str = "random"
+    oversampler: str = "smote"
     
 
 @dataclass
@@ -38,7 +38,7 @@ class Preprocessing:
         data_scaled = self.scaler.fit_transform(self.data.select_dtypes(include=['float64', 'int64']))
         return data_scaled
     
-    def oversample_data(self, target_column: str) ->pd.DataFrame:
+    def oversample_data(self, target_column: str, **params) ->pd.DataFrame:
         """_summary_
 
         Args:
@@ -53,11 +53,11 @@ class Preprocessing:
         Note:
             default smogn first remove columns containing missing values and then rows containing missing values
         """
-        if self.config.oversampler == 'random':
+        if self.config.oversampler == 'smote':
             self.oversampler = smogn.smoter
         else:
             raise ValueError(f"Unsupported scaler: {self.config.oversampler}")        
-            
-        data_oversampled = self.oversampler(data = self.data, y = target_column)
+        data_copy = self.data.copy()    
+        data_oversampled = self.oversampler(data = data_copy, y = target_column, **params)
         return data_oversampled
 
