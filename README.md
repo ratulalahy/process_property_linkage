@@ -1,4 +1,4 @@
-process_property_linkage
+Process Property Linkage
 ==============================
 
 A short description of the project.
