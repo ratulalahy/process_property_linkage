@@ -11,7 +11,7 @@ from base_model import BaseModel, ModelConfig
 @dataclass
 class MLModelConfig(ModelConfig):
     """Dataclass for machine learning model configuration"""
-    hyperparameters: Dict[str, Any] = None
+    hyperparameters: Dict[str, Any] = {}
 
 
 class MLModel(BaseModel):

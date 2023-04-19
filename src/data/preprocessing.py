@@ -1,42 +1,87 @@
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, MinMaxScaler
 from imblearn.over_sampling import RandomOverSampler
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Union, List, Any
 from dataclasses import dataclass
 import smogn
+
+from src.data.data_loader import DataSet
 
 @dataclass
 class PreprocessingConfig:
     missing_values: str = "median"
-    scaler: str = "standard"
+    scaler_method: str = "standard"
     oversampler: str = "smote"
     
 
 @dataclass
 class Preprocessing:
-    data: pd.DataFrame 
+    scaler: Any
     config: PreprocessingConfig
+    
         
     def handle_missing_values(self) -> None:
         if self.config.missing_values == 'median':
-            self.data.fillna(self.data.median(), inplace=True)
+            self.dataset.data.fillna(self.dataset.data.median(), inplace=True)
         else:
             raise ValueError(f"Unsupported scaler: {self.config.missing_values}")
                 
     def handle_outliers(self) -> None:
         pass  # Implement outlier handling
 
+    def fit(self, X: pd.DataFrame) -> 'Preprocessing':
+        """Fit the preprocessing pipeline.
+
+        Args:
+            X (pd.DataFrame): The training input samples.
+
+        Returns:
+            Preprocessing: The fitted preprocessing pipeline.
+        """
+        self.scaler.fit(X)
+        return self
     
-    def normalize_numerical_vars(self):
-        if self.config.scaler == 'standard':
-            self.scaler = StandardScaler()
-        elif self.config.scaler == 'minmax':
-            self.scaler = MinMaxScaler()
-        else:
-            raise ValueError(f"Unsupported scaler: {self.config.scaler}")
-        
-        data_scaled = self.scaler.fit_transform(self.data.select_dtypes(include=['float64', 'int64']))
-        return data_scaled
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        """Apply the preprocessing pipeline.
+
+        Args:
+            X (pd.DataFrame): The input samples.
+
+        Returns:
+            pd.DataFrame: The transformed samples.
+        """
+        X = self.scaler.transform(X)
+        return X
+    
+    def fit_transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
+        """Fit and apply the preprocessing pipeline.
+
+        Args:
+            X (pd.DataFrame): The input samples.
+
+        Returns:
+            pd.DataFrame: The transformed samples.
+        """
+        self.scaler.fit(X)
+        X = self.scaler.transform(X)
+        return X
+    
+    def normalize(self, X_train: pd.DataFrame, X_test: Union[None, pd.DataFrame]=None) -> Union[pd.DataFrame, tuple]:
+        """Normalize the input data.
+
+        Args:
+            X_train (pd.DataFrame): The training input samples.
+            X_test (pd.DataFrame): The testing input samples.
+
+        Returns:
+            Union[pd.DataFrame, tuple]: The normalized training samples and the normalized testing samples, if `X_test` is not None. Otherwise, only the normalized training samples are returned.
+        """
+        if not X_test:
+            return self.fit_transform(X_train)
+
+        X_train_normalized = self.fit_transform(X_train)
+        X_test_normalized = self.transform(X_test)
+        return X_train_normalized, X_test_normalized
     
     def oversample_data(self, target_column: str, **params) ->pd.DataFrame:
         """_summary_
@@ -57,7 +102,7 @@ class Preprocessing:
             self.oversampler = smogn.smoter
         else:
             raise ValueError(f"Unsupported scaler: {self.config.oversampler}")        
-        data_copy = self.data.copy()    
+        data_copy = self.dataset.data.copy()    
         data_oversampled = self.oversampler(data = data_copy, y = target_column, **params)
         return data_oversampled
 

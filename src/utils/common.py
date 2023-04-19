@@ -52,16 +52,25 @@ class Features:
     }
     
     @staticmethod
-    def get_target_columns() -> List:
+    def get_target_columns() -> Optional[Tuple[str, str, str]]:
         """[summary]
         
         Returns:
             List: List of target columns
         """
-        return ['line_width', 'roughness', 'overspray']
+        return ('line_width', 'roughness', 'overspray')
     
     @staticmethod
-    def get_nan_features() -> List:
+    def get_feature_columns() -> List[str]:
+        """[summary]
+        
+        Returns:
+            List: List of feature columns
+        """
+        return ['distance', 'time', 'velocity', 'ink_visco_cp', 'surface_tension_dyne_cm', 'ink _density']
+    
+    @staticmethod
+    def get_nan_features() -> List[str]:
         """_summary_
 
         Returns:
@@ -70,7 +79,7 @@ class Features:
         return ['platen_temperature', 'cartridge_temperature', 'Unnamed: 26', 'thickness', 'conductivity']
     
     @staticmethod
-    def get_id_features() -> List:
+    def get_id_features() -> List[str]:
         """_summary_
 
         Returns:
@@ -79,7 +88,7 @@ class Features:
         return ['print_id', 'print_head_id', 'nozzle_id']
     
     @staticmethod
-    def get_meta_data_features() -> List:
+    def get_meta_data_features() -> List[str]:
         """_summary_
 
         Returns:
@@ -88,7 +97,7 @@ class Features:
         return ['initials', 'notes', 'waveform_file']
     
     @staticmethod
-    def get_const_value_features() -> List:
+    def get_const_value_features() -> List[str]:
         """_summary_
 
         Returns:
@@ -97,6 +106,6 @@ class Features:
         return ['nozzle_diameter', 'jetting_freq', 'substrate_thickness','no_of_layers', 'particle_size']
      
     @staticmethod
-    def get_corelated_features() -> List:
+    def get_corelated_features() -> List[str]:
         return ['z_number',  'ink_visco_pas', 'surface_tension_n_m', 'nozzle_voltage', 'drop_spacing', 'print_height']
         

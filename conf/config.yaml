@@ -19,7 +19,7 @@ loc_dirs:
   f_name_data_features_only: JS_A191_dataset_2023_4_4.tsv
   f_name_data_target_partial_feature: Print_Database_ML.csv
   f_name_data_feature_target_clean: data_feature_target_clean
-  f_name_data_oversample_feature_target_clean: data_oversample_feature_target_clean
+  f_name_data_oversample_feature_target_clean: data_oversample_feature_target_clean_balance
 
 feature_range:
   high:
