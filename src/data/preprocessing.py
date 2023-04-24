@@ -19,10 +19,17 @@ class Preprocessing:
     scaler: Any
     config: PreprocessingConfig
     
+    # def __init__(self, scaler: Any):
+    #     self.scaler = scaler()
         
-    def handle_missing_values(self) -> None:
+    def __init__(self, scaler: Any, config: PreprocessingConfig) -> None:
+        self.scaler = scaler()       
+        self.config = config 
+    
+        
+    def handle_missing_values(self, data : pd.DataFrame) -> None:
         if self.config.missing_values == 'median':
-            self.dataset.data.fillna(self.dataset.data.median(), inplace=True)
+            data.data.fillna(data.data.median(), inplace=True)
         else:
             raise ValueError(f"Unsupported scaler: {self.config.missing_values}")
                 
@@ -53,7 +60,7 @@ class Preprocessing:
         X = self.scaler.transform(X)
         return X
     
-    def fit_transform(self, X: pd.DataFrame, y=None) -> pd.DataFrame:
+    def fit_transform(self, X: pd.DataFrame) -> pd.DataFrame:
         """Fit and apply the preprocessing pipeline.
 
         Args:
@@ -76,14 +83,14 @@ class Preprocessing:
         Returns:
             Union[pd.DataFrame, tuple]: The normalized training samples and the normalized testing samples, if `X_test` is not None. Otherwise, only the normalized training samples are returned.
         """
-        if not X_test:
+        if X_test.empty:
             return self.fit_transform(X_train)
 
         X_train_normalized = self.fit_transform(X_train)
         X_test_normalized = self.transform(X_test)
         return X_train_normalized, X_test_normalized
     
-    def oversample_data(self, target_column: str, **params) ->pd.DataFrame:
+    def oversample_data(self, data: pd.DataFrame, target_column: str, **params) ->pd.DataFrame:
         """_summary_
 
         Args:
@@ -102,7 +109,7 @@ class Preprocessing:
             self.oversampler = smogn.smoter
         else:
             raise ValueError(f"Unsupported scaler: {self.config.oversampler}")        
-        data_copy = self.dataset.data.copy()    
+        data_copy = data.copy()    
         data_oversampled = self.oversampler(data = data_copy, y = target_column, **params)
         return data_oversampled
 

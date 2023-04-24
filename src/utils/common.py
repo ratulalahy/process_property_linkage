@@ -52,13 +52,13 @@ class Features:
     }
     
     @staticmethod
-    def get_target_columns() -> Optional[Tuple[str, str, str]]:
+    def get_target_columns() -> Optional[List[str]]:
         """[summary]
         
         Returns:
             List: List of target columns
         """
-        return ('line_width', 'roughness', 'overspray')
+        return ['line_width', 'roughness', 'overspray']
     
     @staticmethod
     def get_feature_columns() -> List[str]:
