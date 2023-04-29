@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, MinMaxScaler
 from imblearn.over_sampling import RandomOverSampler
 from typing import Tuple, Dict, Union, List, Any
@@ -73,7 +74,7 @@ class Preprocessing:
         X = self.scaler.transform(X)
         return X
     
-    def normalize(self, X_train: pd.DataFrame, X_test: Union[None, pd.DataFrame]=None) -> Union[pd.DataFrame, tuple]:
+    def normalize(self, X_train: Union[pd.DataFrame, np.ndarray], X_test: Union[pd.DataFrame, np.ndarray]= None) -> Union[pd.DataFrame, tuple]:
         """Normalize the input data.
 
         Args:
@@ -83,7 +84,7 @@ class Preprocessing:
         Returns:
             Union[pd.DataFrame, tuple]: The normalized training samples and the normalized testing samples, if `X_test` is not None. Otherwise, only the normalized training samples are returned.
         """
-        if X_test.empty:
+        if X_test.shape[0] == 0 :
             return self.fit_transform(X_train)
 
         X_train_normalized = self.fit_transform(X_train)

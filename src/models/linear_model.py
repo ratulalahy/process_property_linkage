@@ -3,7 +3,8 @@ from tensorflow import keras
 from dataclasses import dataclass
 from .base_model import BaseModel, ModelConfig
 import numpy as np
-from typing import Tuple, Any, Dict
+from typing import Tuple, Any, Dict, Union
+import pandas as pd
 from sklearn.neural_network import MLPRegressor
 
 from base_model import BaseModel, ModelConfig
@@ -38,9 +39,10 @@ class MLModel(BaseModel):
         self.model = model
         return self.model
     
-    def train(self, X_train: np.ndarray, y_train: np.ndarray) -> None:
+    def train(self, X_train: Union[pd.DataFrame, np.ndarray], y_train: Union[pd.DataFrame, np.ndarray]) -> None:
         """Train the machine learning model"""
         self.model.fit(X_train, y_train)
     
-    def predict(self, X_test: np.ndarray) -> np.ndarray:
+    def predict(self, X_test: Union[pd.DataFrame, np.ndarray]) -> Union[pd.DataFrame, np.ndarray]:
+
         """Predict the output of the machine learning model

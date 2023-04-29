@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import pandas as pd
 from typing import Tuple, Dict, Any, List
 
@@ -7,13 +7,13 @@ from typing import Tuple, Dict, Any, List
 @dataclass
 class ModelConfig:
     ml_platform: str 
-    model_type: str 
-    model_params: Dict[str, Any]
+    ml_algo: str 
     optimizer: str
     loss: str
     metrics: List[str]
     epochs: int
-    batch_size: int    
+    batch_size: int
+    model_params: Dict[str, Any] = field(default_factory=dict)
 
 class BaseModel(ABC):
     """Base class for all machine learning models"""

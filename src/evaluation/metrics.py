@@ -1,6 +1,6 @@
 from sklearn.metrics import r2_score, mean_squared_error, accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
-
+# from typing import Float
 class Metrics:
     def __init__(self, y_true: np.ndarray, y_pred: np.ndarray):
         self.y_true = y_true
@@ -18,8 +18,8 @@ class Metrics:
     def f1_score(self) -> float:
         return f1_score(self.y_true, self.y_pred)
     
-    def calculate_r2(y_true, y_pred):
-        return r2_score(y_true, y_pred)
+    def calculate_r2(self) -> float:
+        return r2_score(self.y_true, self.y_pred)
 
-    def calculate_rmse(y_true, y_pred):
-        return mean_squared_error(y_true, y_pred, squared=False)
+    def calculate_rmse(self) -> float:
+        return mean_squared_error(self.y_true, self.y_pred, squared=False)
