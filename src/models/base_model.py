@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 import pandas as pd
-from typing import Tuple, Dict, Any, List
+import numpy as np
+from typing import Tuple, Dict, Any, List, Union
+
 
 
 @dataclass
@@ -10,7 +12,7 @@ class ModelConfig:
     ml_algo: str 
     optimizer: str
     loss: str
-    metrics: List[str]
+    #metrics: List[str]
     epochs: int
     batch_size: int
     model_params: Dict[str, Any] = field(default_factory=dict)
@@ -31,12 +33,12 @@ class BaseModel(ABC):
         pass
         
     @abstractmethod
-    def train(self, X_train: pd.DataFrame, y_train: pd.Series) -> None:
+    def train(self, X_train: Union[pd.DataFrame, pd.Series, np.ndarray], y_train: Union[pd.DataFrame, pd.Series, np.ndarray]) -> None:
         """Train the model
 
         Args:
-            X_train (pd.DataFrame): Features of the training set
-            y_train (pd.Series): Target variable of the training set
+            X_train (Union[pd.DataFrame, pd.Series, np.ndarray]): Features of the training set
+            y_train (Union[pd.DataFrame, pd.Series, np.ndarray]): Target variable of the training set
 
         Returns:
             None
@@ -44,11 +46,11 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def predict(self, X_test: pd.DataFrame) -> pd.Series:
+    def predict(self, X_test: Union[pd.DataFrame, pd.Series, np.ndarray]) -> Union[pd.DataFrame, pd.Series, np.ndarray]:
         """Make predictions using the trained model
 
         Args:
-            X_test (pd.DataFrame): Features of the test set
+            X_test (Union[pd.DataFrame, pd.Series, np.ndarray]): Features of the test set
 
         Returns:
             pd.Series: Predictions of the target variable for the test set
@@ -56,12 +58,12 @@ class BaseModel(ABC):
         pass
 
     @abstractmethod
-    def evaluate(self, X_test: pd.DataFrame, y_test: pd.Series) -> Tuple[float, float]:
+    def evaluate(self, X_test: Union[pd.DataFrame, pd.Series, np.ndarray], y_test: Union[pd.DataFrame, pd.Series, np.ndarray]) -> Tuple[float, float]:
         """Evaluate the model on the test set
 
         Args:
-            X_test (pd.DataFrame): Features of the test set
-            y_test (pd.Series): Target variable of the test set
+            X_test (Union[pd.DataFrame, pd.Series, np.ndarray]): Features of the test set
+            y_test (Union[pd.DataFrame, pd.Series, np.ndarray]): Target variable of the test set
 
         Returns:
             Tuple[float, float]: The evaluation metrics (e.g. accuracy, f1-score)

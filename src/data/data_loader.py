@@ -48,5 +48,9 @@ class DataSet:
         X = self.data[self.prop.feature_columns]
         y = self.data[list(self.prop.target_cols)]
         X_train_val, self.X_test, y_train_val, self.y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+        if val_size <= 0:
+            self.X_train = X_train_val
+            self.y_train = y_train_val
+            return
         self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X_train_val, y_train_val, test_size=val_size, random_state=random_state)
         

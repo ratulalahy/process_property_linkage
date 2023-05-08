@@ -67,7 +67,8 @@ class Features:
         Returns:
             List: List of feature columns
         """
-        return ['distance', 'time', 'velocity', 'ink_visco_cp', 'surface_tension_dyne_cm', 'ink _density']
+        return['print_height', 'nozzle_voltage', 'drop_spacing']
+        #return ['distance', 'time', 'velocity', 'ink_visco_cp', 'surface_tension_dyne_cm', 'ink _density']
     
     @staticmethod
     def get_nan_features() -> List[str]:
