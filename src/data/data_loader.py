@@ -20,8 +20,8 @@ class DatasetProperties:
 @dataclass
 class DataSet:
     data: pd.DataFrame
-    X_train = None
-    X_test = None
+    X_train = Optional[pd.DataFrame]
+    X_test = Optional[pd.DataFrame]
     X_val = None
     y_train = None
     y_test = None
